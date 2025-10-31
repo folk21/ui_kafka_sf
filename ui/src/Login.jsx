@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const [username,setUsername]=useState('');
-  const [password,setPassword]=useState('');
-  const [err,setErr]=useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState(null);
   const { login } = useAuth();
   const nav = useNavigate();
 
-  useEffect(() => { if (username) nav('/welcome'); }, [username, nav]);
+  const { isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated) nav('/welcome');
+  }, [isAuthenticated, nav]);
 
   const submit = async (e) => {
     e.preventDefault(); setErr(null);
@@ -32,18 +35,22 @@ export default function Login() {
           <form className="space-y-3" onSubmit={submit}>
             <label className="form-control w-full">
               <div className="label"><span className="label-text">Username</span></div>
-              <input className="input input-bordered w-full" value={username} onChange={e=>setUsername(e.target.value)}/>
+              <input className="input input-bordered w-full" value={username} onChange={e => setUsername(e.target.value)} />
             </label>
 
             <label className="form-control w-full">
               <div className="label"><span className="label-text">Password</span></div>
-              <input type="password" className="input input-bordered w-full" value={password} onChange={e=>setPassword(e.target.value)}/>
+              <input type="password" className="input input-bordered w-full" value={password} onChange={e => setPassword(e.target.value)} />
             </label>
 
             <button type="submit" className="btn btn-primary w-full">Sign in</button>
           </form>
           <div className="text-sm opacity-70">
-            No account? <Link className="link link-primary" to="/register">Register</Link>
+            No account? <Link className="link link-primary" to="/register" onClick={() => {
+              setUsername('');
+              setPassword('');
+              setErr(null);
+            }}>Register</Link>
           </div>
         </div>
       </div>

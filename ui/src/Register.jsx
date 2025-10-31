@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
-  const [username,setUsername]=useState('');
-  const [password,setPassword]=useState('');
-  const [role,setRole]=useState('STUDENT');
-  const [msg,setMsg]=useState(null);
-  const [err,setErr]=useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('STUDENT');
+  const [msg, setMsg] = useState(null);
+  const [err, setErr] = useState(null);
   const nav = useNavigate();
+
+  useEffect(() => {
+    setUsername('');
+    setPassword('');
+    setRole('STUDENT');
+    setMsg(null);
+    setErr(null);
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault(); setErr(null); setMsg(null);
@@ -15,10 +23,10 @@ export default function Register() {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, role }),
     });
-    const ok = resp.ok; const data = await resp.json().catch(()=>({}));
+    const ok = resp.ok; const data = await resp.json().catch(() => ({}));
     if (!ok) return setErr(data?.error || 'Registration failed');
     setMsg('Registered. You can sign in now.');
-    setTimeout(()=>nav('/login'), 700);
+    setTimeout(() => nav('/login'), 700);
   };
 
   return (
@@ -29,20 +37,20 @@ export default function Register() {
           {msg && <div className="alert alert-success py-2 text-sm">{msg}</div>}
           {err && <div className="alert alert-error py-2 text-sm">{err}</div>}
 
-          <form className="space-y-3" onSubmit={submit}>
+          <form autoComplete="off" className="space-y-3" onSubmit={submit}>
             <label className="form-control">
               <div className="label"><span className="label-text">Username</span></div>
-              <input className="input input-bordered" value={username} onChange={e=>setUsername(e.target.value)} />
+              <input className="input input-bordered" type="text" value={username} autoComplete="username" onChange={e => setUsername(e.target.value)} />
             </label>
 
             <label className="form-control">
               <div className="label"><span className="label-text">Password</span></div>
-              <input type="password" className="input input-bordered" value={password} onChange={e=>setPassword(e.target.value)} />
+              <input type="password" className="input input-bordered" value={password} autoComplete="password" onChange={e => setPassword(e.target.value)} />
             </label>
 
             <label className="form-control">
               <div className="label"><span className="label-text">Role</span></div>
-              <select className="select select-bordered" value={role} onChange={e=>setRole(e.target.value)}>
+              <select className="select select-bordered" value={role} onChange={e => setRole(e.target.value)}>
                 <option value="STUDENT">STUDENT</option>
                 <option value="INSTRUCTOR">INSTRUCTOR</option>
               </select>

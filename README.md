@@ -1,32 +1,31 @@
-
 # ui_kafka_sf
 
-Spring Boot + Redpanda (Kafka) + React (dev UI) + DynamoDB users + JWT auth (2h) + Prometheus/Actuator.
-Kinesis removed (replaced with Kafka/Redpanda). Diagnostics/Prometheus kept.
+Spring Boot demo with **Auth + Kafka + DynamoDB** and a simple UI.
+
+## Modules
+- `backend` — Spring Boot app: auth (`/api/auth/register`, `/api/auth/login`), Kafka producer/consumer, DynamoDB writes.
+- `ui` — Front-end (React/Vite or similar) for basic flows.
+- `localstack` — init-scripts and docs for LocalStack/DynamoDB (инфраструктура поднимается **из корневого** `docker-compose.yml`).
+- `sf-service` — stub external processor service.
 
 ## Quick start (dev)
 ```bash
-# 1) Start infra (Redpanda + Console + LocalStack: DynamoDB)
+# 1) Start dev infra (from project root)
 docker compose up -d
 
-# 2) Backend
+# 2) Run backend
 ./gradlew :backend:bootRun
 
-# 3) Frontend (dev)
-cd ui && npm i && npm run dev
-
-# Login default:
-#   username: admin
-#   password: admin123
-# After login, token stored in localStorage. Expires 2 hours.
+# 3) Run UI
+cd ui && npm install && npm run dev
 ```
 
-## Notes
-- DynamoDB table: `user` (partition key: `username`).
-- SF "send" is modeled as producing JSON to Kafka topic `sf.events`.
-- AWS credentials for DynamoDB picked from env (works with LocalStack by default).
+## Tests
+```bash
+./gradlew :backend:test
+```
 
-
-## Record migration
-- Core data classes converted to Java `record` where applicable (UserEntity, SfEvent, DTOs).
-- Lombok `@Data` kept for `AppProperties`.
+## Clean & rebuild
+```bash
+./gradlew clean build
+```
