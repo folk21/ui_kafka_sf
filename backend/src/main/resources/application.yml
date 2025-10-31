@@ -1,0 +1,43 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ui-kafka-sf
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:19092}
+    properties:
+      allow.auto.create.topics: true
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ui-kafka-sf
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info,env,threaddump,loggers
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-change-me}
+    ttlMinutes: 120
+  kafka:
+    topic: sf.events
+  aws:
+    region: ${AWS_REGION:us-east-1}
+    dynamodb:
+      endpoint: ${DDB_ENDPOINT:http://localhost:4566}
+      table: user
+      sfTable: sf_contact
+
+logging:
+  level:
+    org.springframework.security: DEBUG

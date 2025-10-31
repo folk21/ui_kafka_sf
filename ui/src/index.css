@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* необязательный фон страницы */
+@layer base {
+  html, body, #root { @apply h-full; }
+  body { @apply bg-base-200 text-base-content; } /* цвета из темы DaisyUI */
+}
