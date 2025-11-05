@@ -8,6 +8,7 @@ import com.example.ui_kafka_sf.auth.dto.TokenResp;
 import com.example.ui_kafka_sf.auth.dto.UserRegisteredEvent;
 import com.example.ui_kafka_sf.auth.util.JwtUtil;
 import jakarta.validation.Valid;
+import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -75,5 +76,15 @@ public class AuthController {
     return ResponseEntity.ok(
         new TokenResp(
             pair.token(), pair.expiresInSec(), u.get().getUsername(), u.get().getRole().name()));
+  }
+
+  @GetMapping("/api/auth/me")
+  public Map<String, Object> me(org.springframework.security.core.Authentication auth) {
+    var roles = auth == null ? java.util.List.of()
+        : auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
+    return java.util.Map.of(
+        "principal", auth == null ? null : auth.getName(),
+        "roles", roles
+    );
   }
 }

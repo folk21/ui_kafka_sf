@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import Welcome from './Welcome';
 import Landing from './Landing';
+import AdminUsers from './admin/AdminUsers';
 import './index.css';
 
 function Topbar() {
@@ -11,6 +12,7 @@ function Topbar() {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="container mx-auto px-4">
+        {role === 'ADMIN' && <Link to="/admin/users" className="btn btn-ghost">Admin</Link>}
         <div className="flex-1">
           <Link to="/" className="btn btn-ghost text-xl">ui_kafka_sf</Link>
         </div>
@@ -45,6 +47,7 @@ export default function App() {
             <Route path="/register" element={<Register/>}/>
             <Route path="/welcome" element={<Welcome/>}/>
             <Route path="/" element={<Landing/>}/>
+            <Route path="/admin/users" element={<AdminUsers/>}/>
           </Routes>
         </div>
       </BrowserRouter>
