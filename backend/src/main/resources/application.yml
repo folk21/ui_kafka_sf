@@ -53,8 +53,4 @@ app:
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.security.web.access: DEBUG
-    org.springframework.security.authorization: DEBUG

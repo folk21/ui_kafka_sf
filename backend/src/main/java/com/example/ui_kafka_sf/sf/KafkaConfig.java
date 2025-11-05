@@ -7,9 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
+/** KafkaConfig supports idempotency persistence and/or Kafka integration for SF submissions. */
 @Configuration
-@ConditionalOnProperty(prefix="app.kafka", name="enabled", havingValue="true", matchIfMissing=true)
+@ConditionalOnProperty(
+    prefix = "app.kafka",
+    name = "enabled",
+    havingValue = "true",
+    matchIfMissing = true)
 public class KafkaConfig {
+
   @Bean
   @ConditionalOnMissingBean
   NewTopic sfTopic() {

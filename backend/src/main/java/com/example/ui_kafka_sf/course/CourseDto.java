@@ -2,6 +2,7 @@ package com.example.ui_kafka_sf.course;
 
 import java.time.OffsetDateTime;
 
+/** CourseDto belongs to the Course domain (entity/repository/DTO for course operations). */
 public record CourseDto(
     String id,
     String code,
@@ -11,5 +12,4 @@ public record CourseDto(
     String year,
     OffsetDateTime expired,
     boolean started,
-    String instructorId
-) {}
+    String instructorId) {}

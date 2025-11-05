@@ -1,12 +1,15 @@
 package com.example.ui_kafka_sf.auth;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+/**
+ * AdminUserController exposes authentication endpoints (register, login, JWT issuance) and acts as
+ * an entry point for auth flows.
+ */
 @RestController
 @RequestMapping("/api/admin/users")
 public class AdminUserController {
@@ -19,20 +22,28 @@ public class AdminUserController {
     this.encoder = encoder;
   }
 
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   public record UserView(String username, Role role) {
-    public static UserView from(User u) { return new UserView(u.getUsername(), u.getRole()); }
+
+    /** Performs a unit of domain logic; see README for the surrounding flow. */
+    public static UserView from(User u) {
+      return new UserView(u.getUsername(), u.getRole());
+    }
   }
+
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   public record ChangePasswordReq(@NotBlank String newPassword) {}
 
-  /** Список всех пользователей (логины + роли) */
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   @GetMapping
   public List<UserView> all() {
     return users.findAll().stream().map(UserView::from).toList();
   }
 
-  /** Смена пароля конкретному пользователю (админская) */
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   @PutMapping("/{username}/password")
-  public ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody ChangePasswordReq req) {
+  public ResponseEntity<?> changePassword(
+      @PathVariable String username, @RequestBody ChangePasswordReq req) {
     var u = users.findByUsername(username).orElse(null);
     if (u == null) {
       return ResponseEntity.notFound().build();

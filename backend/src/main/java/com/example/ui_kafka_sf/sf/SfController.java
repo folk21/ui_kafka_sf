@@ -19,7 +19,8 @@ public class SfController {
   private final AppProperties props;
   private final SfIdempotencyRepository idemRepo;
 
-  public SfController(KafkaTemplate<String, Object> kafka, AppProperties props, SfIdempotencyRepository idemRepo) {
+  public SfController(
+      KafkaTemplate<String, Object> kafka, AppProperties props, SfIdempotencyRepository idemRepo) {
     this.kafka = kafka;
     this.props = props;
     this.idemRepo = idemRepo;
@@ -28,7 +29,13 @@ public class SfController {
   /** Returns {"status":"queued"} or {"status":"duplicate_ignored"} */
   @PostMapping("/submit")
   public ResponseEntity<?> submit(@Valid @RequestBody SfEvent event) {
-    var hash = sha256(event.email() + "|" + nullToEmpty(event.fullName()) + "|" + nullToEmpty(event.message()));
+    var hash =
+        sha256(
+            event.email()
+                + "|"
+                + nullToEmpty(event.fullName())
+                + "|"
+                + nullToEmpty(event.message()));
     boolean firstTime = idemRepo.tryReserveFirstSend(event.email(), hash);
     if (!firstTime) return ResponseEntity.ok(Map.of("status", "duplicate_ignored"));
 
@@ -37,7 +44,9 @@ public class SfController {
   }
 
   // normalize null to empty for stable hashing
-  private static String nullToEmpty(String s){ return s == null ? "" : s; }
+  private static String nullToEmpty(String s) {
+    return s == null ? "" : s;
+  }
 
   // sha-256 helper
   private static String sha256(String s) {

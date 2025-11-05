@@ -1,13 +1,14 @@
 package com.example.ui_kafka_sf.course;
 
 import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 import lombok.*;
 
-import java.time.OffsetDateTime;
-
+/** Course belongs to the Course domain (entity/repository/DTO for course operations). */
 @Entity
 @Table(name = "course")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,8 +16,7 @@ import java.time.OffsetDateTime;
 @ToString
 public class Course {
 
-  @Id
-  private String id;
+  @Id private String id;
 
   @Column(nullable = false, unique = true)
   private String code;
@@ -35,8 +35,7 @@ public class Course {
 
   private OffsetDateTime expired;
 
-  @Builder.Default
-  private boolean started = false;
+  @Builder.Default private boolean started = false;
 
   /** Instructor user id (username or external id) */
   @Column(name = "instructor_id")

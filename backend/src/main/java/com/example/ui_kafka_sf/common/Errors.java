@@ -1,4 +1,3 @@
-
 package com.example.ui_kafka_sf.common;
 
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ public enum Errors {
 
   public final HttpStatus status;
   public final String code;
+
   Errors(HttpStatus status, String code) {
     this.status = status;
     this.code = code;

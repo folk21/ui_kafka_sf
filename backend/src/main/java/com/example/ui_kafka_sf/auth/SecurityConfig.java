@@ -29,15 +29,17 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * SecurityConfig configures HTTP security, JWT filter chain, public endpoints, and role-based
+ * authorization rules.
+ */
 @Configuration
 public class SecurityConfig {
 
   private final AppProperties props;
-  private final String jwtSecret; // подайте из AppProperties/app.jwt.secret
 
   public SecurityConfig(AppProperties props) {
     this.props = props;
-    this.jwtSecret = props.getJwt().getSecret();
   }
 
   @Bean
@@ -123,7 +125,7 @@ public class SecurityConfig {
             }
           }
           if (StringUtils.hasText(username) && StringUtils.hasText(roleFromToken)) {
-            // нормализуем к формату Spring Security
+
             String authority =
                 roleFromToken.startsWith("ROLE_") ? roleFromToken : "ROLE_" + roleFromToken;
 

@@ -5,8 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Application configuration bound from properties with prefix {@code app}.
- * Uses Lombok {@code @Data} to avoid manual getters/setters.
+ * AppProperties is part of the application's domain layer.
+ *
+ * <p>Application configuration bound from properties with prefix {@code app}. Uses Lombok
+ * {@code @Data} to avoid manual getters/setters.
  */
 @Data
 @Component
@@ -27,6 +29,7 @@ public class AppProperties {
   public static class Kafka {
     /** Topic for SF events */
     private String topic = "sf.events";
+
     /** Topic for user registration events */
     private String usersTopic = "users.registered";
   }

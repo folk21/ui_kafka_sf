@@ -5,9 +5,13 @@ import lombok.*;
 
 import java.time.Instant;
 
+/**
+ * SfIdempotencyEntity supports idempotency persistence and/or Kafka integration for SF submissions.
+ */
 @Entity
 @Table(name = "sf_idempotency")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,7 +19,6 @@ import java.time.Instant;
 @ToString
 public class SfIdempotencyEntity {
 
-  /** Уникальный хеш запроса (email|fullName|message) */
   @Id
   @Column(name = "key_hash", nullable = false, updatable = false, length = 128)
   private String keyHash;

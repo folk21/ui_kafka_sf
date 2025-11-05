@@ -3,9 +3,11 @@ package com.example.ui_kafka_sf.auth;
 import jakarta.persistence.*;
 import lombok.*;
 
+/** User models application users and related authentication/authorization types. */
 @Entity
 @Table(name = "app_user")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -13,8 +15,7 @@ import lombok.*;
 @ToString(exclude = "passwordHash")
 public class User {
 
-  @Id
-  private String username;
+  @Id private String username;
 
   @Column(nullable = false)
   private String passwordHash;

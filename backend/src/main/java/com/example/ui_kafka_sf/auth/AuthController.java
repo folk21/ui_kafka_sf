@@ -8,10 +8,12 @@ import com.example.ui_kafka_sf.auth.dto.TokenResp;
 import com.example.ui_kafka_sf.auth.dto.UserRegisteredEvent;
 import com.example.ui_kafka_sf.auth.util.JwtUtil;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +43,7 @@ public class AuthController {
   public ResponseEntity<?> register(@Valid @RequestBody RegisterReq req) {
     var existing = users.findByUsername(req.username());
     if (existing.isPresent()) {
-      return ResponseEntity.badRequest().body(of("error","user_exists"));
+      return ResponseEntity.badRequest().body(of("error", "user_exists"));
     }
 
     var u = new User();
@@ -55,15 +57,17 @@ public class AuthController {
       return ResponseEntity.badRequest().body(of("error", "user_exists"));
     }
     // безопасная публикация (в тестах KafkaTemplate замокан)
-    var topic = (props.getKafka()!=null) ? props.getKafka().getTopic() : null;
+    var topic = (props.getKafka() != null) ? props.getKafka().getTopic() : null;
     if (kafka != null && topic != null && !topic.isBlank()) {
       try {
-        kafka.send(topic, new UserRegisteredEvent(
-            req.username(), u.getRole(), System.currentTimeMillis()
-        ));
-      } catch (Exception ignore) { /* no-op */ }
+        kafka.send(
+            topic,
+            new UserRegisteredEvent(req.username(), u.getRole(), System.currentTimeMillis()));
+      } catch (Exception ignore) {
+        /* no-op */
+      }
     }
-    return ResponseEntity.ok(of("status","ok"));
+    return ResponseEntity.ok(of("status", "ok"));
   }
 
   @PostMapping("/login")
@@ -79,12 +83,11 @@ public class AuthController {
   }
 
   @GetMapping("/api/auth/me")
-  public Map<String, Object> me(org.springframework.security.core.Authentication auth) {
-    var roles = auth == null ? java.util.List.of()
-        : auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
-    return java.util.Map.of(
-        "principal", auth == null ? null : auth.getName(),
-        "roles", roles
-    );
+  public Map<String, Object> me(Authentication auth) {
+    var roles =
+        auth == null
+            ? List.of()
+            : auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
+    return of("principal", auth == null ? null : auth.getName(), "roles", roles);
   }
 }

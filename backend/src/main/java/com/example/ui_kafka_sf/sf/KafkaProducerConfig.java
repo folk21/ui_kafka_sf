@@ -1,4 +1,3 @@
-
 package com.example.ui_kafka_sf.sf;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -14,12 +13,16 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * KafkaProducerConfig supports idempotency persistence and/or Kafka integration for SF submissions.
+ */
 @Configuration
 public class KafkaProducerConfig {
 
   @Value("${spring.kafka.bootstrap-servers}")
   private String bootstrap;
 
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   @Bean
   public ProducerFactory<String, Object> producerFactory() {
     Map<String, Object> props = new HashMap<>();
@@ -30,6 +33,7 @@ public class KafkaProducerConfig {
     return new DefaultKafkaProducerFactory<>(props);
   }
 
+  /** Performs a unit of domain logic; see README for the surrounding flow. */
   @Bean
   public KafkaTemplate<String, Object> kafkaTemplate() {
     return new KafkaTemplate<>(producerFactory());
