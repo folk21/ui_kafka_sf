@@ -29,3 +29,19 @@ cd ui && npm install && npm run dev
 ```bash
 ./gradlew clean build
 ```
+
+## Database: PostgreSQL
+
+The app now stores **Users** and **Courses** in PostgreSQL (JPA/Hibernate).
+Run infra:
+```bash
+docker compose up -d
+```
+Backend:
+```bash
+./gradlew :backend:bootRun
+```
+UI:
+```bash
+cd ui && npm i && npm run dev
+```

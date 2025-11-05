@@ -12,6 +12,9 @@ java {
 repositories { mavenCentral() }
 
 dependencies {
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  runtimeOnly("org.postgresql:postgresql:42.7.4")
+
   compileOnly("org.projectlombok:lombok:1.18.34")
   annotationProcessor("org.projectlombok:lombok:1.18.34")
   testCompileOnly("org.projectlombok:lombok:1.18.34")
@@ -31,8 +34,6 @@ dependencies {
   implementation("org.springframework.kafka:spring-kafka")
 
   // AWS DynamoDB v2
-  implementation("software.amazon.awssdk:dynamodb:2.28.24")
-  implementation("software.amazon.awssdk:apache-client:2.28.24")
 
   // OpenAPI
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
@@ -41,11 +42,17 @@ dependencies {
   
   testImplementation("org.springframework.kafka:spring-kafka-test")
   testImplementation("org.testcontainers:junit-jupiter:1.20.3")
+  testImplementation("org.testcontainers:postgresql:1.20.3")
   testImplementation("org.testcontainers:kafka:1.20.3")
   testImplementation("org.testcontainers:localstack:1.20.3")
-
+  testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 tasks.test {
   useJUnitPlatform()
+  testLogging {
+    showStandardStreams = true   // <-- печатать stdout/stderr
+    events("FAILED", "SKIPPED", "PASSED")
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+  }
 }

@@ -20,12 +20,5 @@ services:
       KAFKA_BROKERS: "redpanda:9092"
     ports: [ "8081:8080" ]
 
-  localstack:
-    image: localstack/localstack:3.7
-    environment:
-      - SERVICES=dynamodb
-      - DEFAULT_REGION=us-east-1
-    ports:
-      - "4566:4566"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+volumes:
+  pgdata:
