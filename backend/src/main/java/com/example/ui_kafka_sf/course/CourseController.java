@@ -4,19 +4,17 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /** CourseController provides CRUD endpoints for courses and an instructor-scoped listing. */
 @RestController
 @RequestMapping("/api/course")
+@RequiredArgsConstructor
 public class CourseController {
 
   private final CourseRepository repo;
-
-  public CourseController(CourseRepository repo) {
-    this.repo = repo;
-  }
 
   private static CourseDto toDto(Course c) {
     return new CourseDto(

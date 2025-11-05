@@ -1,11 +1,28 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useAuth } from "../AuthContext"; // проверь путь!
+import { useNavigate } from "react-router-dom";
 
 export default function AdminUsers() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pwdFor, setPwdFor] = useState(null); // username для смены пароля
+  const [pwdFor, setPwdFor] = useState(null);
   const [pwd, setPwd] = useState('');
+
+  const { token, logout } = useAuth();   // <— добавили token
+  const navigate = useNavigate();
+
+  // если токен пропал → уходим на /login и компонент размонтируется
+  useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+  }, [token, navigate]);
+
+  const onLogout = () => {
+    logout();
+    // navigate("/login", { replace: true }); // уже не обязательно — эффект выше сработает
+  };
 
   async function load() {
     setLoading(true);
@@ -13,8 +30,8 @@ export default function AdminUsers() {
       const r = await api.get('/admin/users');
       setItems(r.data);
     } catch (e) {
-        console.error(e);
-        alert(`Cannot load users: ${e?.response?.status || e}`);
+      console.error(e);
+      alert(`Cannot load users: ${e?.response?.status || e}`);
     } finally {
       setLoading(false);
     }
@@ -30,7 +47,10 @@ export default function AdminUsers() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Users</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Users</h1>
+        <button className="btn" onClick={onLogout}>Logout</button>
+      </div>
 
       {loading ? <div className="loading loading-spinner loading-md"></div> : (
         <div className="overflow-x-auto">

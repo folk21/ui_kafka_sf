@@ -23,7 +23,7 @@ export default function Login() {
     if (!resp.ok) return setErr('Login failed');
     const data = await resp.json();
     login(data.token, data.username, data.role);
-    nav('/welcome');
+    nav(data.role === 'ADMIN' ? '/admin/users' : '/welcome');
   };
 
   return (

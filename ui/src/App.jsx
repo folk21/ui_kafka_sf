@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
+import ProtectedRoute from "./routing/ProtectedRoute";
 import Login from './Login';
 import Register from './Register';
 import Welcome from './Welcome';
@@ -48,6 +49,9 @@ export default function App() {
             <Route path="/welcome" element={<Welcome/>}/>
             <Route path="/" element={<Landing/>}/>
             <Route path="/admin/users" element={<AdminUsers/>}/>
+            <Route element={<ProtectedRoute role="ADMIN" />}>
+              <Route path="/admin/users" element={<AdminUsers />} />
+            </Route>          
           </Routes>
         </div>
       </BrowserRouter>

@@ -2,6 +2,7 @@ package com.example.ui_kafka_sf.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -12,19 +13,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/admin/users")
+@RequiredArgsConstructor
 public class AdminUserController {
 
   private final UserRepository users;
   private final PasswordEncoder encoder;
 
-  public AdminUserController(UserRepository users, PasswordEncoder encoder) {
-    this.users = users;
-    this.encoder = encoder;
-  }
-
   /** Performs a unit of domain logic; see README for the surrounding flow. */
   public record UserView(String username, Role role) {
-
     /** Performs a unit of domain logic; see README for the surrounding flow. */
     public static UserView from(User u) {
       return new UserView(u.getUsername(), u.getRole());
